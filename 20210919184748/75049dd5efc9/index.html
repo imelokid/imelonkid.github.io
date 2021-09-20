@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="通过Druid管理derby时，在连接池初始化时抛出如下异常1Syntax error: Encountered &quot;&lt;EOF&gt;&quot; at line 1, column 8 原因是：Druid在初始化连接池时会对每个建立的连接进行check,配置如下：12345678910111213141516171819202122232425server:  port: 8086">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Derby数据库使用问题记录">
+<meta property="og:url" content="http://example.com/20210919184748/75049dd5efc9/index.html">
+<meta property="og:site_name" content="MelonKid&#96;Blog">
+<meta property="og:description" content="通过Druid管理derby时，在连接池初始化时抛出如下异常1Syntax error: Encountered &quot;&lt;EOF&gt;&quot; at line 1, column 8 原因是：Druid在初始化连接池时会对每个建立的连接进行check,配置如下：12345678910111213141516171819202122232425server:  port: 8086">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-09-19T10:47:48.000Z">
+<meta property="article:modified_time" content="2021-09-19T10:59:35.303Z">
+<meta property="article:author" content="melonkid">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="derby">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Derby数据库使用问题记录</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdn.staticfile.org/mathjax/2.7.4/MathJax.js' async></script>
+	
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/20210920105926/ed7143a47944/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/20210908183825/f64a4835d72d/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210919184748/75049dd5efc9/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210919184748/75049dd5efc9/&text=Derby数据库使用问题记录"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210919184748/75049dd5efc9/&is_video=false&description=Derby数据库使用问题记录"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Derby数据库使用问题记录&body=Check out this article: http://example.com/20210919184748/75049dd5efc9/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210919184748/75049dd5efc9/&name=Derby数据库使用问题记录&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210919184748/75049dd5efc9/&t=Derby数据库使用问题记录"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87Druid%E7%AE%A1%E7%90%86derby%E6%97%B6%EF%BC%8C%E5%9C%A8%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E6%8A%9B%E5%87%BA%E5%A6%82%E4%B8%8B%E5%BC%82%E5%B8%B8"><span class="toc-number">1.</span> <span class="toc-text">通过Druid管理derby时，在连接池初始化时抛出如下异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E8%AF%AD%E6%B3%95%E4%B8%8EMYSQL%E7%95%A5%E6%9C%89%E4%B8%8D%E5%90%8C"><span class="toc-number">2.</span> <span class="toc-text">SQL语法与MYSQL略有不同</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%B5%8C%E6%A8%A1%E5%BC%8F%E4%B8%8D%E5%AE%B9%E8%AE%B8%E5%A4%96%E9%83%A8%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.</span> <span class="toc-text">内嵌模式不容许外部连接</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Derby数据库使用问题记录
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">melonkid</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-09-19T10:47:48.000Z" itemprop="datePublished">2021-09-19</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/derby/" rel="tag">derby</a>, <a class="tag-link-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a>
+    </div>
+
+
+      
+      <span class="name" >
+          <span id="busuanzi_container_site_pv" style='display:none'></span>
+            |visted:<span id="busuanzi_value_page_pv"></span>
+        </span>
+      </span>
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="通过Druid管理derby时，在连接池初始化时抛出如下异常"><a href="#通过Druid管理derby时，在连接池初始化时抛出如下异常" class="headerlink" title="通过Druid管理derby时，在连接池初始化时抛出如下异常"></a>通过Druid管理derby时，在连接池初始化时抛出如下异常</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Syntax error: Encountered <span class="string">&quot;&lt;EOF&gt;&quot;</span> at line <span class="number">1</span>, column <span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>原因是：Druid在初始化连接池时会对每个建立的连接进行check,配置如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8086</span><br><span class="line">  </span><br><span class="line">spring:</span><br><span class="line">    datasource:</span><br><span class="line">        name: test</span><br><span class="line">        url: jdbc:derby:melon-daily.db</span><br><span class="line">        username: root</span><br><span class="line">        password: xxx</span><br><span class="line">        # 使用druid数据源</span><br><span class="line">        type: com.alibaba.druid.pool.DruidDataSource</span><br><span class="line">        driver-class-name: org.apache.derby.jdbc.EmbeddedDriver</span><br><span class="line">        filters: stat</span><br><span class="line">        maxActive: 20</span><br><span class="line">        initialSize: 1</span><br><span class="line">        maxWait: 60000</span><br><span class="line">        minIdle: 1</span><br><span class="line">        timeBetweenEvictionRunsMillis: 60000</span><br><span class="line">        minEvictableIdleTimeMillis: 300000</span><br><span class="line">        validationQuery: select &#x27;x&#x27;</span><br><span class="line">        testWhileIdle: true</span><br><span class="line">        testOnBorrow: false</span><br><span class="line">        testOnReturn: false</span><br><span class="line">        poolPreparedStatements: true</span><br><span class="line">        maxOpenPreparedStatements: 20</span><br></pre></td></tr></table></figure><br>注意这里的配置：validationQuery: select ‘x’<br>这个select ‘x’在mysql数据库是可以正常运行的，但是derby不支持这种写法。常见数据库的校验SQL如下：</p>
+<p>SELECT 1/SELECT x</p>
+<ul>
+<li>H2</li>
+<li>MySQL</li>
+<li>Microsoft SQL Server (according to <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/3668506/efficient-sql-test-query-that-will-work-across-all-or-most-databases/3668676#3668676">NimChimpsky</a>)</li>
+<li>PostgreSQL</li>
+<li>SQLite</li>
+<li>Hive</li>
+</ul>
+<hr>
+<p>SELECT 1 FROM DUAL</p>
+<ul>
+<li>Oracle</li>
+</ul>
+<hr>
+<p> SELECT 1 FROM any_existing_table WHERE 1=0<br>or<br>SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS<br>or<br>CALL NOW()</p>
+<ul>
+<li>HSQLDB (tested with version 1.8.0.10)<em>Note: I tried using a WHERE 1=0 clause on the second query, but it didn’t work as a value for Apache Commons DBCP’s validationQuery, since the query doesn’t return any rows</em></li>
+</ul>
+<hr>
+<p>VALUES 1 or SELECT 1 FROM SYSIBM.SYSDUMMY1</p>
+<ul>
+<li>Apache Derby (via <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/3668506/efficient-sql-test-query-or-validation-query-that-will-work-across-all-or-most#comment18895011_3670000">daiscog</a>)</li>
+</ul>
+<hr>
+<p>SELECT 1 FROM SYSIBM.SYSDUMMY1</p>
+<ul>
+<li>DB2</li>
+</ul>
+<hr>
+<p>select count(*) from systables</p>
+<ul>
+<li>Informix</li>
+</ul>
+<p>不过对于JDBC4，数据库已经通过API来验证连接了。所以这种验证方案在JDBC4中已经不推荐使用了</p>
+<blockquote>
+<p>If your driver supports JDBC4 we strongly recommend not setting this property. This is for “legacy” databases that do not support the JDBC4 Connection.isValid() API. This is the query that will be executed just before a connection is given to you from the pool to validate that the connection to the database is still alive. Again, try running the pool without this property, HikariCP will log an error if your driver is not JDBC4 compliant to let you know. Default: none</p>
+</blockquote>
+<h3 id="SQL语法与MYSQL略有不同"><a href="#SQL语法与MYSQL略有不同" class="headerlink" title="SQL语法与MYSQL略有不同"></a>SQL语法与MYSQL略有不同</h3><p>比如创建表时，某一列叫user<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> m_sensitive_words(id <span class="type">int</span> generated <span class="keyword">by</span> <span class="keyword">default</span> <span class="keyword">as</span> <span class="keyword">identity</span>, word <span class="type">varchar</span>(<span class="number">40</span>), <span class="keyword">user</span> <span class="type">varchar</span>(<span class="number">100</span>), msg <span class="type">varchar</span>(<span class="number">100</span>))</span><br></pre></td></tr></table></figure><br>Syntax error: Encountered “user” at line 1, column 91.<br>​</p>
+<p>在SQL中使用引号标记列也是不容许的<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> m_sensitive_words(`id` <span class="type">int</span> generated <span class="keyword">by</span> <span class="keyword">default</span> <span class="keyword">as</span> <span class="keyword">identity</span>, `word` <span class="type">varchar</span>(<span class="number">40</span>), `<span class="keyword">user</span>` <span class="type">varchar</span>(<span class="number">100</span>), `msg` <span class="type">varchar</span>(<span class="number">100</span>))&quot;</span><br></pre></td></tr></table></figure><br>Lexical error at line 1, column 32.  Encountered: “`” (96), after : “”.<br>​</p>
+<h3 id="内嵌模式不容许外部连接"><a href="#内嵌模式不容许外部连接" class="headerlink" title="内嵌模式不容许外部连接"></a>内嵌模式不容许外部连接</h3><p>内嵌模式只支持启动进程访问，外部进程无法访问。</p>
+
+  </div>
+</article>
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<div id="vcomments"></div>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'kVnoh5GMJIaO7wfioxy7eqat-gzGzoHsz',
+        appKey: 'OqRohOLiM36VuNLF5jjAJkap',
+        avatar:'mp' // (''/mp/identicon/monsterid/wavatar/robohash/retro)
+    })
+</script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87Druid%E7%AE%A1%E7%90%86derby%E6%97%B6%EF%BC%8C%E5%9C%A8%E8%BF%9E%E6%8E%A5%E6%B1%A0%E5%88%9D%E5%A7%8B%E5%8C%96%E6%97%B6%E6%8A%9B%E5%87%BA%E5%A6%82%E4%B8%8B%E5%BC%82%E5%B8%B8"><span class="toc-number">1.</span> <span class="toc-text">通过Druid管理derby时，在连接池初始化时抛出如下异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL%E8%AF%AD%E6%B3%95%E4%B8%8EMYSQL%E7%95%A5%E6%9C%89%E4%B8%8D%E5%90%8C"><span class="toc-number">2.</span> <span class="toc-text">SQL语法与MYSQL略有不同</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E5%B5%8C%E6%A8%A1%E5%BC%8F%E4%B8%8D%E5%AE%B9%E8%AE%B8%E5%A4%96%E9%83%A8%E8%BF%9E%E6%8E%A5"><span class="toc-number">3.</span> <span class="toc-text">内嵌模式不容许外部连接</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210919184748/75049dd5efc9/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210919184748/75049dd5efc9/&text=Derby数据库使用问题记录"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210919184748/75049dd5efc9/&is_video=false&description=Derby数据库使用问题记录"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Derby数据库使用问题记录&body=Check out this article: http://example.com/20210919184748/75049dd5efc9/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210919184748/75049dd5efc9/&title=Derby数据库使用问题记录"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210919184748/75049dd5efc9/&name=Derby数据库使用问题记录&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210919184748/75049dd5efc9/&t=Derby数据库使用问题记录"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    melonkid
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      pv:<span id="busuanzi_value_site_pv"></span>|uv:<span id="busuanzi_value_site_uv"></span>
+    </span>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

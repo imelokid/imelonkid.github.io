@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="题目(中等难度) 解答暴力破解核心思想：将给定字符串的所有子字符串都列出来，然后对每个字符串进行元素重复判断。假如给定的字符串长度是n，那么本字符串的所有可能子串个数为以第一个字符开头的子串个数为: n以第二个字符开头的子串个数为: n-1..以最后一个字符开头的子串个数为: 1所以总共的子串个数为 1 + 2 + … + (n - 1) + n；可以看到上面是一个等差数列求和，结果为: 实现代码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法-获取最长不重复子串">
+<meta property="og:url" content="http://example.com/20210908183825/f64a4835d72d/index.html">
+<meta property="og:site_name" content="MelonKid&#96;Blog">
+<meta property="og:description" content="题目(中等难度) 解答暴力破解核心思想：将给定字符串的所有子字符串都列出来，然后对每个字符串进行元素重复判断。假如给定的字符串长度是n，那么本字符串的所有可能子串个数为以第一个字符开头的子串个数为: n以第二个字符开头的子串个数为: n-1..以最后一个字符开头的子串个数为: 1所以总共的子串个数为 1 + 2 + … + (n - 1) + n；可以看到上面是一个等差数列求和，结果为: 实现代码">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1631091874227-6614c7ce-0159-4e2e-93c1-fda6b6a76935.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=558&amp;id=uffc071bb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1116&amp;originWidth=1308&amp;originalType=binary&amp;ratio=1&amp;size=124739&amp;status=done&amp;style=none&amp;taskId=u447a627f-e84a-4339-a812-f9a6f060dc1&amp;width=654">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/0006ffcffaeb7ac514ed42b8edec4239.svg#card=math&amp;code=f%28n%29%3D%7Bn%281%2Bn%29%20%5Cover%202%7D&amp;id=aaTIg">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1631095201317-96a1c0f1-91c8-47df-9401-db5c8018fd1a.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=427&amp;id=u831533f0&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=854&amp;originWidth=2146&amp;originalType=binary&amp;ratio=1&amp;size=287538&amp;status=done&amp;style=none&amp;taskId=uf4706f94-62cb-4d99-8e5b-323527a44a1&amp;width=1073">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1631095251885-543c0aff-ab39-4fd0-aaca-bb953c8ac5b2.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=546&amp;id=u0f285c5d&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1092&amp;originWidth=1974&amp;originalType=binary&amp;ratio=1&amp;size=322923&amp;status=done&amp;style=none&amp;taskId=u524922eb-64fc-485f-9f7d-9103568144d&amp;width=987">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1631095341076-95816cac-c8e9-4a55-bcc8-46ff182b1625.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=184&amp;id=u97c87d93&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=368&amp;originWidth=610&amp;originalType=binary&amp;ratio=1&amp;size=37291&amp;status=done&amp;style=none&amp;taskId=uac0d4632-8fe0-4d3f-a3a3-75c08356dd9&amp;width=305">
+<meta property="article:published_time" content="2021-09-08T10:38:25.000Z">
+<meta property="article:modified_time" content="2021-09-08T10:41:24.483Z">
+<meta property="article:author" content="melonkid">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="滑动窗口">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1631091874227-6614c7ce-0159-4e2e-93c1-fda6b6a76935.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=558&amp;id=uffc071bb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1116&amp;originWidth=1308&amp;originalType=binary&amp;ratio=1&amp;size=124739&amp;status=done&amp;style=none&amp;taskId=u447a627f-e84a-4339-a812-f9a6f060dc1&amp;width=654">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>算法-获取最长不重复子串</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdn.staticfile.org/mathjax/2.7.4/MathJax.js' async></script>
+	
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/20210919184748/75049dd5efc9/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/20210906211212/1c4119b8462f/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210908183825/f64a4835d72d/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210908183825/f64a4835d72d/&text=算法-获取最长不重复子串"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210908183825/f64a4835d72d/&is_video=false&description=算法-获取最长不重复子串"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法-获取最长不重复子串&body=Check out this article: http://example.com/20210908183825/f64a4835d72d/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210908183825/f64a4835d72d/&name=算法-获取最长不重复子串&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210908183825/f64a4835d72d/&t=算法-获取最长不重复子串"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-%E4%B8%AD%E7%AD%89%E9%9A%BE%E5%BA%A6"><span class="toc-number">1.</span> <span class="toc-text">题目(中等难度)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94"><span class="toc-number">2.</span> <span class="toc-text">解答</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">暴力破解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-number">2.1.1.</span> <span class="toc-text">实现代码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.1.2.</span> <span class="toc-text">复杂度：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text"> </span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="toc-number">2.3.</span> <span class="toc-text">滑动窗口</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#-1"><span class="toc-number">2.3.0.1.</span> <span class="toc-text"> </span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%EF%BC%9A-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">实现代码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%EF%BC%9A-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">复杂度：</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        算法-获取最长不重复子串
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">melonkid</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-09-08T10:38:25.000Z" itemprop="datePublished">2021-09-08</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3/" rel="tag">滑动窗口</a>, <a class="tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
+    </div>
+
+
+      
+      <span class="name" >
+          <span id="busuanzi_container_site_pv" style='display:none'></span>
+            |visted:<span id="busuanzi_value_page_pv"></span>
+        </span>
+      </span>
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="题目-中等难度"><a href="#题目-中等难度" class="headerlink" title="题目(中等难度)"></a>题目(中等难度)</h2><p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1631091874227-6614c7ce-0159-4e2e-93c1-fda6b6a76935.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=558&amp;id=uffc071bb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1116&amp;originWidth=1308&amp;originalType=binary&amp;ratio=1&amp;size=124739&amp;status=done&amp;style=none&amp;taskId=u447a627f-e84a-4339-a812-f9a6f060dc1&amp;width=654" alt="image.png"></p>
+<h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><h3 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a>暴力破解</h3><p>核心思想：将给定字符串的所有子字符串都列出来，然后对每个字符串进行元素重复判断。<br>假如给定的字符串长度是n，那么本字符串的所有可能子串个数为<br>以第一个字符开头的子串个数为: n<br>以第二个字符开头的子串个数为: n-1<br>..<br>以最后一个字符开头的子串个数为: 1<br>所以总共的子串个数为 1 + 2 + … + (n - 1) + n；<br>可以看到上面是一个等差数列求和，结果为:<br><img src="https://cdn.nlark.com/yuque/__latex/0006ffcffaeb7ac514ed42b8edec4239.svg#card=math&amp;code=f%28n%29%3D%7Bn%281%2Bn%29%20%5Cover%202%7D&amp;id=aaTIg" alt=""></p>
+<h4 id="实现代码："><a href="#实现代码：" class="headerlink" title="实现代码："></a>实现代码：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 保存所有可能的子字符串</span></span><br><span class="line">List&lt;String&gt; subStrs = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得所有子串</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = i; j &lt; s.length(); j++) &#123;</span><br><span class="line">        subStrs.add(s.substring(i, j + <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> maxLen = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查每个子串，并得到最长无重复子串</span></span><br><span class="line"><span class="keyword">for</span>(String subStr : subStrs) &#123;</span><br><span class="line">    <span class="comment">// 是否有重复KEY</span></span><br><span class="line">    <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 字典</span></span><br><span class="line">	Map&lt;Character, Integer&gt; hash = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; subStr.length(); i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(hash.containsKey(subStr.charAt(i))) &#123;</span><br><span class="line">            flag = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        hash.put(subStr.charAt(i), i);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(flag) &#123;</span><br><span class="line">        <span class="comment">// 有重复KEY 舍弃</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 符合要求的字符串</span></span><br><span class="line">    maxLen = Math.max(maxLen, subStr.length());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="复杂度："><a href="#复杂度：" class="headerlink" title="复杂度："></a>复杂度：</h4><p>获取所有子字符串的时间复杂度是O(n<em>n)<br>遍历每个子串的时间复杂度为O(n</em>n<em>n)<br>空间复杂度为：O(n </em> n) 需要一个n*n的数组保存所有的子串</p>
+<blockquote>
+<p>上面代码可以进一步优化，将保存子串的数组去掉，获取到子串时，直接进行重复校验即可。空间复杂度变为O(n)</p>
+</blockquote>
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h3 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h3><p>定义两个指针[i, j]，分别界定窗口的左右区间。窗口大小为size=j-i+1;<br>初始时：i,j都指向第一个元素，窗口大小为0<br>接着滑动窗口的右边界，获取一个校验元素m<br>如果m在窗口中不重复，则将其添加到窗口m,否则调整窗口，将窗口左边界移动到窗口与校验元素的后一个元素。<br>重复上面过程，直至数组中所有元素都遍历完毕。</p>
+<h5 id="-1"><a href="#-1" class="headerlink" title=" "></a> </h5><blockquote>
+<p>case1:<br>输入：”dvdf”<br>输出：3<br>最长子串: “vdf”</p>
+</blockquote>
+<p>执行过程：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1631095201317-96a1c0f1-91c8-47df-9401-db5c8018fd1a.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=427&amp;id=u831533f0&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=854&amp;originWidth=2146&amp;originalType=binary&amp;ratio=1&amp;size=287538&amp;status=done&amp;style=none&amp;taskId=uf4706f94-62cb-4d99-8e5b-323527a44a1&amp;width=1073" alt="image.png"></p>
+<blockquote>
+<p>case2:<br>输入：”dddd”<br>输出：1<br>最长子串: “d”</p>
+</blockquote>
+<p>执行过程：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1631095251885-543c0aff-ab39-4fd0-aaca-bb953c8ac5b2.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=546&amp;id=u0f285c5d&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1092&amp;originWidth=1974&amp;originalType=binary&amp;ratio=1&amp;size=322923&amp;status=done&amp;style=none&amp;taskId=u524922eb-64fc-485f-9f7d-9103568144d&amp;width=987" alt="image.png"><br>​</p>
+<blockquote>
+<p>case3:<br>输入：”d”<br>输出：1<br>最长子串: “d”</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1631095341076-95816cac-c8e9-4a55-bcc8-46ff182b1625.png#clientId=u0d869f26-97aa-4&amp;from=paste&amp;height=184&amp;id=u97c87d93&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=368&amp;originWidth=610&amp;originalType=binary&amp;ratio=1&amp;size=37291&amp;status=done&amp;style=none&amp;taskId=uac0d4632-8fe0-4d3f-a3a3-75c08356dd9&amp;width=305" alt="image.png"></p>
+<h4 id="实现代码：-1"><a href="#实现代码：-1" class="headerlink" title="实现代码："></a>实现代码：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 左边界指针</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> j = i;</span><br><span class="line"><span class="keyword">int</span> maxLen = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 右边界指针</span></span><br><span class="line"><span class="keyword">for</span> (; j &lt; s.length(); j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (i == j) &#123;</span><br><span class="line">        <span class="comment">// 窗口大小为1 两个指针指向同一个元素，啥也不做，等待</span></span><br><span class="line">        <span class="comment">// 右边界j右滑，获取新的校验元素</span></span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//窗口[i, j) 这里不不含j，因为这个j现在还没有真正进入窗口</span></span><br><span class="line">    <span class="comment">//在进入窗口之前，需要先对其做一个重复校验</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> k = i; k &lt; j; k++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (s.charAt(k) == s.charAt(j)) &#123;</span><br><span class="line">            <span class="comment">// 出现重复，需要调整窗口。不过在调整之前，需要更新最长子串长度</span></span><br><span class="line">            <span class="comment">// 因为窗口调整前和调整后是两个不同的子串</span></span><br><span class="line">            <span class="comment">// 注意这里是j - i，因为j元素目前还是校验元素，并没有真正在窗口中</span></span><br><span class="line">            maxLen = Math.max(maxLen, j - i);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 出现重复，这时需要调整窗口；调整方法是：将窗口左边界移动到窗口中</span></span><br><span class="line">            <span class="comment">// 与校验元素重复的元素后一个位置。当前窗口中的重复元素位置为k</span></span><br><span class="line">            i = k + <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里的j = s.length 所以窗口长度计算如下</span></span><br><span class="line"><span class="keyword">return</span> Math.max(maxLen, j - i);</span><br></pre></td></tr></table></figure>
+<h4 id="复杂度：-1"><a href="#复杂度：-1" class="headerlink" title="复杂度："></a>复杂度：</h4><p>最外层要对字符串进行完全遍历，循环内部需要对窗口进行重复判断。所以时间复杂度为O(n*n)<br>由于整个计算过程只用到了matLen一个变量，所以空间复杂度为O(1)</p>
+
+  </div>
+</article>
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<div id="vcomments"></div>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'kVnoh5GMJIaO7wfioxy7eqat-gzGzoHsz',
+        appKey: 'OqRohOLiM36VuNLF5jjAJkap',
+        avatar:'mp' // (''/mp/identicon/monsterid/wavatar/robohash/retro)
+    })
+</script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE-%E4%B8%AD%E7%AD%89%E9%9A%BE%E5%BA%A6"><span class="toc-number">1.</span> <span class="toc-text">题目(中等难度)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E7%AD%94"><span class="toc-number">2.</span> <span class="toc-text">解答</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3"><span class="toc-number">2.1.</span> <span class="toc-text">暴力破解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-number">2.1.1.</span> <span class="toc-text">实现代码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%EF%BC%9A"><span class="toc-number">2.1.2.</span> <span class="toc-text">复杂度：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">2.2.</span> <span class="toc-text"> </span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="toc-number">2.3.</span> <span class="toc-text">滑动窗口</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#-1"><span class="toc-number">2.3.0.1.</span> <span class="toc-text"> </span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81%EF%BC%9A-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">实现代码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6%EF%BC%9A-1"><span class="toc-number">2.3.2.</span> <span class="toc-text">复杂度：</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210908183825/f64a4835d72d/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210908183825/f64a4835d72d/&text=算法-获取最长不重复子串"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210908183825/f64a4835d72d/&is_video=false&description=算法-获取最长不重复子串"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=算法-获取最长不重复子串&body=Check out this article: http://example.com/20210908183825/f64a4835d72d/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210908183825/f64a4835d72d/&title=算法-获取最长不重复子串"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210908183825/f64a4835d72d/&name=算法-获取最长不重复子串&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210908183825/f64a4835d72d/&t=算法-获取最长不重复子串"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    melonkid
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      pv:<span id="busuanzi_value_site_pv"></span>|uv:<span id="busuanzi_value_site_uv"></span>
+    </span>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

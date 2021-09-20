@@ -1234,6 +1234,9 @@ article .content .caption {
 .blog-post-comments {
   margin-top: 4rem;
 }
+.vpower.txt-right {
+  display: none;
+}
 #footer {
   position: absolute;
   bottom: 0;

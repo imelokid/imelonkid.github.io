@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="问题 解题贪心算法：从数组第一个元素开始，第x个元素的和f(x)依赖f(x-1)的和的情况。如果f(x-1)&lt;0，那么f(x)抛弃f(x-1)的值，使得f(x)&#x3D;nums[x]。否则，f(x) &#x3D; nums + f(x - 1)。即： 如下图：输入数组[-2, 1, -3, 4, -1, 2, 1, -5, 4]  123456789101112131415161718public int">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode53_最大和子序">
+<meta property="og:url" content="http://example.com/20210920105926/ed7143a47944/index.html">
+<meta property="og:site_name" content="MelonKid&#96;Blog">
+<meta property="og:description" content="问题 解题贪心算法：从数组第一个元素开始，第x个元素的和f(x)依赖f(x-1)的和的情况。如果f(x-1)&lt;0，那么f(x)抛弃f(x-1)的值，使得f(x)&#x3D;nums[x]。否则，f(x) &#x3D; nums + f(x - 1)。即： 如下图：输入数组[-2, 1, -3, 4, -1, 2, 1, -5, 4]  123456789101112131415161718public int">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632100311402-0dc7d88b-537f-4efa-9641-15e0756d04dc.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=601&amp;id=u3ecba6d6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1202&amp;originWidth=1134&amp;originalType=binary&amp;ratio=1&amp;size=102857&amp;status=done&amp;style=none&amp;taskId=udbbb8d80-9b5e-4e31-8a48-9224a0d1f51&amp;width=567">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/48c3844d7f492dade0d3a51e23a43486.svg#card=math&amp;code=f%28x%29%20%3D%0A%5Cbegin%7Bcases%7D%0Anums%5Bx%5D%2C%20%20f%28x%20-%201%29%20%3C%200%20%5C%5C%0Anums%5Bx%5D%20%2B%20f%28x%20-%201%29%2C%20f%28x%20-%201%29%20%3E%3D%200%0A%5Cend%7Bcases%7D&amp;id=JH5Nl">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632104096277-b6042c47-985f-475d-be2e-01cb3d553ac9.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=461&amp;id=ua4445c46&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1036&amp;originWidth=840&amp;originalType=binary&amp;ratio=1&amp;size=103467&amp;status=done&amp;style=none&amp;taskId=u5e4af402-0fc1-40b3-a94d-5b466cdbfd1&amp;width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632104121655-73ea4ddc-44e4-4771-aef1-c19c43ff3828.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=457&amp;id=u941e6fa6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1066&amp;originWidth=770&amp;originalType=binary&amp;ratio=1&amp;size=102802&amp;status=done&amp;style=none&amp;taskId=u9e875546-cc27-419f-889b-f3eab34249b&amp;width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632104200845-ac2c493d-4d9b-47b1-a42a-fed726783ef8.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=451&amp;id=u17c308e0&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=948&amp;originWidth=754&amp;originalType=binary&amp;ratio=1&amp;size=92766&amp;status=done&amp;style=none&amp;taskId=ubb39f718-b2ca-4c43-8133-23f148b874e&amp;width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632105957082-a4ab5bcb-b36f-4dc1-bb76-bfcc9c06927c.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=425&amp;id=ub9705cab&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=954&amp;originWidth=792&amp;originalType=binary&amp;ratio=1&amp;size=91455&amp;status=done&amp;style=none&amp;taskId=u76d4623b-d09a-4d66-a1aa-68c2929d8ba&amp;width=353">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632105988643-d5a41934-f494-4e92-9a3f-eb86d1e21020.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=431&amp;id=u53559481&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=998&amp;originWidth=730&amp;originalType=binary&amp;ratio=1&amp;size=88689&amp;status=done&amp;style=none&amp;taskId=u40c6697e-c789-4c62-861a-b8e93089604&amp;width=315">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632106021716-34a8a3e8-2eb9-4ce1-93ca-8701f86673de.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=427&amp;id=u52d5ee7c&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=954&amp;originWidth=732&amp;originalType=binary&amp;ratio=1&amp;size=92332&amp;status=done&amp;style=none&amp;taskId=u6838fe68-fef3-4aa5-a063-2b50b173f7a&amp;width=328">
+<meta property="article:published_time" content="2021-09-20T02:59:26.000Z">
+<meta property="article:modified_time" content="2021-09-20T03:04:34.123Z">
+<meta property="article:author" content="melonkid">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="子序">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632100311402-0dc7d88b-537f-4efa-9641-15e0756d04dc.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=601&amp;id=u3ecba6d6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1202&amp;originWidth=1134&amp;originalType=binary&amp;ratio=1&amp;size=102857&amp;status=done&amp;style=none&amp;taskId=udbbb8d80-9b5e-4e31-8a48-9224a0d1f51&amp;width=567">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>leetcode53_最大和子序</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdn.staticfile.org/mathjax/2.7.4/MathJax.js' async></script>
+	
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post " href="/20210920182438/390b81879c7b/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/20210919184748/75049dd5efc9/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210920105926/ed7143a47944/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210920105926/ed7143a47944/&text=leetcode53_最大和子序"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210920105926/ed7143a47944/&is_video=false&description=leetcode53_最大和子序"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=leetcode53_最大和子序&body=Check out this article: http://example.com/20210920105926/ed7143a47944/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210920105926/ed7143a47944/&name=leetcode53_最大和子序&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210920105926/ed7143a47944/&t=leetcode53_最大和子序"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">解题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">贪心算法：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="toc-number">2.2.</span> <span class="toc-text">动态规划</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        leetcode53_最大和子序
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">melonkid</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-09-20T02:59:26.000Z" itemprop="datePublished">2021-09-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/leetcode/" rel="tag">leetcode</a>, <a class="tag-link-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a>, <a class="tag-link-link" href="/tags/%E5%AD%90%E5%BA%8F/" rel="tag">子序</a>, <a class="tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
+    </div>
+
+
+      
+      <span class="name" >
+          <span id="busuanzi_container_site_pv" style='display:none'></span>
+            |visted:<span id="busuanzi_value_page_pv"></span>
+        </span>
+      </span>
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632100311402-0dc7d88b-537f-4efa-9641-15e0756d04dc.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=601&amp;id=u3ecba6d6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1202&amp;originWidth=1134&amp;originalType=binary&amp;ratio=1&amp;size=102857&amp;status=done&amp;style=none&amp;taskId=udbbb8d80-9b5e-4e31-8a48-9224a0d1f51&amp;width=567" alt="image.png"></p>
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><h4 id="贪心算法："><a href="#贪心算法：" class="headerlink" title="贪心算法："></a>贪心算法：</h4><p>从数组第一个元素开始，第x个元素的和f(x)依赖f(x-1)的和的情况。如果f(x-1)&lt;0，那么f(x)抛弃f(x-1)的值，使得<br>f(x)=nums[x]。否则，f(x) = nums + f(x - 1)。即：<br><img src="https://cdn.nlark.com/yuque/__latex/48c3844d7f492dade0d3a51e23a43486.svg#card=math&amp;code=f%28x%29%20%3D%0A%5Cbegin%7Bcases%7D%0Anums%5Bx%5D%2C%20%20f%28x%20-%201%29%20%3C%200%20%5C%5C%0Anums%5Bx%5D%20%2B%20f%28x%20-%201%29%2C%20f%28x%20-%201%29%20%3E%3D%200%0A%5Cend%7Bcases%7D&amp;id=JH5Nl" alt=""></p>
+<p>如下图：输入数组[-2, 1, -3, 4, -1, 2, 1, -5, 4]<br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632104096277-b6042c47-985f-475d-be2e-01cb3d553ac9.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=461&amp;id=ua4445c46&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1036&amp;originWidth=840&amp;originalType=binary&amp;ratio=1&amp;size=103467&amp;status=done&amp;style=none&amp;taskId=u5e4af402-0fc1-40b3-a94d-5b466cdbfd1&amp;width=10" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632104121655-73ea4ddc-44e4-4771-aef1-c19c43ff3828.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=457&amp;id=u941e6fa6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1066&amp;originWidth=770&amp;originalType=binary&amp;ratio=1&amp;size=102802&amp;status=done&amp;style=none&amp;taskId=u9e875546-cc27-419f-889b-f3eab34249b&amp;width=10" alt="image.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632104200845-ac2c493d-4d9b-47b1-a42a-fed726783ef8.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=451&amp;id=u17c308e0&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=948&amp;originWidth=754&amp;originalType=binary&amp;ratio=1&amp;size=92766&amp;status=done&amp;style=none&amp;taskId=ubb39f718-b2ca-4c43-8133-23f148b874e&amp;width=10" alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(nums == <span class="keyword">null</span> || nums.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> preSum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> maxSum = nums[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">    	<span class="keyword">if</span>(preSum &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        	preSum = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        preSum += nums[i];</span><br><span class="line">		maxSum = Math.max(preSum, nums[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> maxSum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h4><p>数组的每个元素(状态)通过转移方程f(x)转移到另一个状态，并从转移状态中找到目标值。<br>f(x) = max(nums[x], f(x-1) + nums[x]);<br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632105957082-a4ab5bcb-b36f-4dc1-bb76-bfcc9c06927c.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=425&amp;id=ub9705cab&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=954&amp;originWidth=792&amp;originalType=binary&amp;ratio=1&amp;size=91455&amp;status=done&amp;style=none&amp;taskId=u76d4623b-d09a-4d66-a1aa-68c2929d8ba&amp;width=353" alt="image.png"><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632105988643-d5a41934-f494-4e92-9a3f-eb86d1e21020.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=431&amp;id=u53559481&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=998&amp;originWidth=730&amp;originalType=binary&amp;ratio=1&amp;size=88689&amp;status=done&amp;style=none&amp;taskId=u40c6697e-c789-4c62-861a-b8e93089604&amp;width=315" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632106021716-34a8a3e8-2eb9-4ce1-93ca-8701f86673de.png#clientId=uaef0fc2c-b6dd-4&amp;from=paste&amp;height=427&amp;id=u52d5ee7c&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=954&amp;originWidth=732&amp;originalType=binary&amp;ratio=1&amp;size=92332&amp;status=done&amp;style=none&amp;taskId=u6838fe68-fef3-4aa5-a063-2b50b173f7a&amp;width=328" alt="image.png"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>[] transArr = <span class="keyword">new</span> <span class="keyword">int</span>[nums.length];</span><br><span class="line">    <span class="keyword">int</span> transStatus = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 状态转移</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        transStatus += nums[i];</span><br><span class="line">        transStatus = Math.max(transStatus, nums[i]);</span><br><span class="line">        transArr[i] = transStatus;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 找最优解</span></span><br><span class="line">    <span class="keyword">int</span> bestStatus = transArr[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; transArr.length; i++) &#123;</span><br><span class="line">    	bestStatus = Math.max(bestStatus, transArr[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> bestStatus;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>优化：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> bestStatus = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> transStatus = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 状态转移</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        transStatus += nums[i];</span><br><span class="line">        transStatus = Math.max(transStatus, nums[i]);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(i == <span class="number">0</span>) &#123;</span><br><span class="line">        	bestStatus = transStatus;</span><br><span class="line">        &#125;</span><br><span class="line">        bestStatus = Math.max(bestStatus, transStatus);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> bestStatus;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+  </div>
+</article>
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<div id="vcomments"></div>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'kVnoh5GMJIaO7wfioxy7eqat-gzGzoHsz',
+        appKey: 'OqRohOLiM36VuNLF5jjAJkap',
+        avatar:'mp' // (''/mp/identicon/monsterid/wavatar/robohash/retro)
+    })
+</script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">解题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">贪心算法：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="toc-number">2.2.</span> <span class="toc-text">动态规划</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210920105926/ed7143a47944/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210920105926/ed7143a47944/&text=leetcode53_最大和子序"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210920105926/ed7143a47944/&is_video=false&description=leetcode53_最大和子序"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=leetcode53_最大和子序&body=Check out this article: http://example.com/20210920105926/ed7143a47944/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210920105926/ed7143a47944/&title=leetcode53_最大和子序"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210920105926/ed7143a47944/&name=leetcode53_最大和子序&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210920105926/ed7143a47944/&t=leetcode53_最大和子序"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    melonkid
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      pv:<span id="busuanzi_value_site_pv"></span>|uv:<span id="busuanzi_value_site_uv"></span>
+    </span>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
