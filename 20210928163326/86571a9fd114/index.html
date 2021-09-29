@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="题目给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。说明：你不能倾斜容器。 示例​  思路暴力破解：列出数组中所有可能的容积，找出最大的容积即可。123456789101112131415public">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode11_ 盛最多水的容器">
+<meta property="og:url" content="http://example.com/20210928163326/86571a9fd114/index.html">
+<meta property="og:site_name" content="MelonKid&#96;Blog">
+<meta property="og:description" content="题目给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。说明：你不能倾斜容器。 示例​  思路暴力破解：列出数组中所有可能的容积，找出最大的容积即可。123456789101112131415public">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632818087511-3b8abbfe-7564-4297-ad78-371135e021c6.png#clientId=u25850f18-dd97-4&amp;from=paste&amp;height=236&amp;id=uebff17fb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=383&amp;originWidth=801&amp;originalType=binary&amp;ratio=1&amp;size=40967&amp;status=done&amp;style=none&amp;taskId=uab4c973d-9438-4006-bd73-c390c97751d&amp;width=493.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632818145699-6223d62f-03fb-4653-8a4a-f897e970d205.png#clientId=u25850f18-dd97-4&amp;from=paste&amp;height=438&amp;id=u3e9d85dc&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=876&amp;originWidth=1238&amp;originalType=binary&amp;ratio=1&amp;size=83822&amp;status=done&amp;style=none&amp;taskId=uad2d59d5-8268-491f-9db9-e51c2c95370&amp;width=619">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/466e2d102dce85d581702316561144f3.svg#card=math&amp;code=adjust%28i%2C%20j%29%20%3D%0A%5Cbegin%7Bcases%7D%0Ai%20-%3E%20i1%2C%20%20%28i%3Cj%29%20%26%20%5Ctext%7B%E5%B7%A6%E8%BE%B9%E7%95%8C%E5%8F%B3%E6%BB%91%7D%5C%5C%0Aj%20-%3E%20j1%2C%20%28i%20%3E%20j%29%20%26%20%5Ctext%7B%E5%8F%B3%E8%BE%B9%E7%95%8C%E5%B7%A6%E6%BB%91%7D%20%5C%5C%0Ai%20-%3E%20i1%2C%20%28i%20%3D%20j%29%20%26%20%5Ctext%7B%E7%A7%BB%E5%8A%A8%E5%B7%A6%E5%8F%B3%E7%AA%97%E5%8F%A3%E9%83%BD%E5%8F%AF%E4%BB%A5%EF%BC%8C%E8%BF%99%E9%87%8C%E7%A7%BB%E5%8A%A8%E5%B7%A6%E8%BE%B9%E7%95%8C%7D%0A%5Cend%7Bcases%7D&amp;id=d5X3n">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/f1a22b35b239f198c1eaa20853707580.svg#card=math&amp;code=area%3DMath.min%28f%28i%29%2C%20f%28j%29%29%20%2A%20%28j%20-%20i%29&amp;id=TNcGZ">
+<meta property="article:published_time" content="2021-09-28T08:33:26.000Z">
+<meta property="article:modified_time" content="2021-09-28T09:25:57.434Z">
+<meta property="article:author" content="melonkid">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1632818087511-3b8abbfe-7564-4297-ad78-371135e021c6.png#clientId=u25850f18-dd97-4&amp;from=paste&amp;height=236&amp;id=uebff17fb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=383&amp;originWidth=801&amp;originalType=binary&amp;ratio=1&amp;size=40967&amp;status=done&amp;style=none&amp;taskId=uab4c973d-9438-4006-bd73-c390c97751d&amp;width=493.5">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>leetcode11_ 盛最多水的容器</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdn.staticfile.org/mathjax/2.7.4/MathJax.js' async></script>
+	
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/20210921213206/b142cf02dd0f/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210928163326/86571a9fd114/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210928163326/86571a9fd114/&text=leetcode11_ 盛最多水的容器"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210928163326/86571a9fd114/&is_video=false&description=leetcode11_ 盛最多水的容器"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=leetcode11_ 盛最多水的容器&body=Check out this article: http://example.com/20210928163326/86571a9fd114/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210928163326/86571a9fd114/&name=leetcode11_ 盛最多水的容器&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210928163326/86571a9fd114/&t=leetcode11_ 盛最多水的容器"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">暴力破解：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">2.1.1.</span> <span class="toc-text">复杂度</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E6%8C%87%E9%92%88%E6%B3%95%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">双指针法：</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        leetcode11_ 盛最多水的容器
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">melonkid</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-09-28T08:33:26.000Z" itemprop="datePublished">2021-09-28</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/leetcode/" rel="tag">leetcode</a>, <a class="tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
+    </div>
+
+
+      
+      <span class="name" >
+          <span id="busuanzi_container_site_pv" style='display:none'></span>
+            |visted:<span id="busuanzi_value_page_pv"></span>
+        </span>
+      </span>
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。<br />说明：你不能倾斜容器。<br /></p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632818087511-3b8abbfe-7564-4297-ad78-371135e021c6.png#clientId=u25850f18-dd97-4&amp;from=paste&amp;height=236&amp;id=uebff17fb&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=383&amp;originWidth=801&amp;originalType=binary&amp;ratio=1&amp;size=40967&amp;status=done&amp;style=none&amp;taskId=uab4c973d-9438-4006-bd73-c390c97751d&amp;width=493.5" alt="image.png"><br />​</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1632818145699-6223d62f-03fb-4653-8a4a-f897e970d205.png#clientId=u25850f18-dd97-4&amp;from=paste&amp;height=438&amp;id=u3e9d85dc&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=876&amp;originWidth=1238&amp;originalType=binary&amp;ratio=1&amp;size=83822&amp;status=done&amp;style=none&amp;taskId=uad2d59d5-8268-491f-9db9-e51c2c95370&amp;width=619" alt="image.png"></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><h4 id="暴力破解："><a href="#暴力破解：" class="headerlink" title="暴力破解："></a>暴力破解：</h4><p>列出数组中所有可能的容积，找出最大的容积即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxArea = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> len = height.length;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 列出所有可能出现的容器，并计算最大的容积</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; len; j++) &#123;</span><br><span class="line">        	<span class="keyword">int</span> tmpArea = Math.min(height[i], height[j]) * (j - i);</span><br><span class="line">            maxArea = Math.max(maxArea, tmpArea);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> maxArea;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure></p>
+<h5 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h5><p>时间复杂度:O(n*n) 空间复杂度:O(1)<br />​<br /></p>
+<h4 id="双指针法："><a href="#双指针法：" class="headerlink" title="双指针法："></a>双指针法：</h4><p>两个指针同时指向数组的首尾(i, j)，计算好面积后调整窗口后继续计算容积。调整方式为：<br /><img src="https://cdn.nlark.com/yuque/__latex/466e2d102dce85d581702316561144f3.svg#card=math&amp;code=adjust%28i%2C%20j%29%20%3D%0A%5Cbegin%7Bcases%7D%0Ai%20-%3E%20i1%2C%20%20%28i%3Cj%29%20%26%20%5Ctext%7B%E5%B7%A6%E8%BE%B9%E7%95%8C%E5%8F%B3%E6%BB%91%7D%5C%5C%0Aj%20-%3E%20j1%2C%20%28i%20%3E%20j%29%20%26%20%5Ctext%7B%E5%8F%B3%E8%BE%B9%E7%95%8C%E5%B7%A6%E6%BB%91%7D%20%5C%5C%0Ai%20-%3E%20i1%2C%20%28i%20%3D%20j%29%20%26%20%5Ctext%7B%E7%A7%BB%E5%8A%A8%E5%B7%A6%E5%8F%B3%E7%AA%97%E5%8F%A3%E9%83%BD%E5%8F%AF%E4%BB%A5%EF%BC%8C%E8%BF%99%E9%87%8C%E7%A7%BB%E5%8A%A8%E5%B7%A6%E8%BE%B9%E7%95%8C%7D%0A%5Cend%7Bcases%7D&amp;id=d5X3n" alt=""><br />​</p>
+<p>双指针法计算证明：<br />设数组第i，j个元素分别为：f(i), f(j); 那么由左右边界构成的矩形面积为 <br /><img src="https://cdn.nlark.com/yuque/__latex/f1a22b35b239f198c1eaa20853707580.svg#card=math&amp;code=area%3DMath.min%28f%28i%29%2C%20f%28j%29%29%20%2A%20%28j%20-%20i%29&amp;id=TNcGZ" alt=""><br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">假设f(i) &lt;= f(j)，min(f(i), f(j)) = f(i)</span><br><span class="line">此时如果将右边界左移，j -&gt; j1   </span><br><span class="line">有：(j1 - i) &lt; (j -i)  </span><br><span class="line">且：min(f(i), f(j1)) &lt;= Math.min(f(i), f(j))</span><br><span class="line">	因为：如果f(j1) &lt;= f(j) </span><br><span class="line">  				如果f(j1) &lt; f(i) -&gt; min(f(i), f(j1)) = f(j1)</span><br><span class="line">      		如果f(i) &lt; f(j1) &lt;= f(j) -&gt; min(f(i), f(j1)) = f(i)</span><br><span class="line">    	如果：f(j1) &gt; f(j)</span><br><span class="line">      		min(f(i), f(j1)) = f(i)</span><br><span class="line">所以：如果f(i) &lt;= f(j)时，无论怎么调整j，都会满足下面条件</span><br><span class="line">min(f(i), f(j1))*(j1 - i) &lt; min(f(i), f(j)) *(j - i)</span><br><span class="line">所以，当f(i) &lt;= f(j)时不能调整右边界，只能调整左边界。</span><br></pre></td></tr></table></figure><br>通过上面的调整，我们可以不断调整丢弃不合适的边界，然后缩小窗口范围。直到窗口缩小为0,即i == j。<br />实现代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxArea</span><span class="params">(<span class="keyword">int</span>[] height)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> maxArea = <span class="number">0</span>;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// 定义左右边界</span></span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> j = height.length - <span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">// adjust窗口</span></span><br><span class="line">    <span class="keyword">while</span>(i &lt; j) &#123;</span><br><span class="line">        <span class="comment">// 计算当前矩形面积</span></span><br><span class="line">        <span class="keyword">int</span> tmpArea = Math.min(height[i], height[j]) * (j - i);</span><br><span class="line">        maxArea = Math.max(maxArea, tmpArea);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 调整窗口</span></span><br><span class="line">        <span class="keyword">if</span>(height[i] &lt;= height[j]) &#123; </span><br><span class="line">            <span class="comment">// 左边界右滑</span></span><br><span class="line">        	i++;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 右边界左滑</span></span><br><span class="line">        j--;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> maxArea;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure><br>​</p>
+<p>​<br /></p>
+
+  </div>
+</article>
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<div id="vcomments"></div>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'kVnoh5GMJIaO7wfioxy7eqat-gzGzoHsz',
+        appKey: 'OqRohOLiM36VuNLF5jjAJkap',
+        avatar:'mp' // (''/mp/identicon/monsterid/wavatar/robohash/retro)
+    })
+</script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">2.</span> <span class="toc-text">思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">暴力破解：</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">2.1.1.</span> <span class="toc-text">复杂度</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8C%E6%8C%87%E9%92%88%E6%B3%95%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">双指针法：</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20210928163326/86571a9fd114/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20210928163326/86571a9fd114/&text=leetcode11_ 盛最多水的容器"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20210928163326/86571a9fd114/&is_video=false&description=leetcode11_ 盛最多水的容器"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=leetcode11_ 盛最多水的容器&body=Check out this article: http://example.com/20210928163326/86571a9fd114/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20210928163326/86571a9fd114/&title=leetcode11_ 盛最多水的容器"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20210928163326/86571a9fd114/&name=leetcode11_ 盛最多水的容器&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20210928163326/86571a9fd114/&t=leetcode11_ 盛最多水的容器"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    melonkid
+    <span id="busuanzi_container_site_pv" style='display:none'>
+      pv:<span id="busuanzi_value_site_pv"></span>|uv:<span id="busuanzi_value_site_uv"></span>
+    </span>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdn.staticfile.org/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
