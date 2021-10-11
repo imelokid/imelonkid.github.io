@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="referrer" content="no-referrer"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="思路动态规划：根据跟定条件可以看出，这道题其实就是一个m*n的二维表格。对于给定的位置p(x,y)，能到达p的所有可能情况有  从上往下p1(x - 1, y) -&gt; p   从左往右p2(x, y -1) -&gt; p    那么达到p的所有可能路径是paths(p1) + paths(p2);​ 在这个二维表格中，从初始位置到边界的任何位置，都只有一条路径。所以每个边界上的位置的所有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Leetcode-62-不同路径问题">
+<meta property="og:url" content="http://example.com/20211011224435/89307fe3d0b9/index.html">
+<meta property="og:site_name" content="MelonKid&#96;Blog">
+<meta property="og:description" content="思路动态规划：根据跟定条件可以看出，这道题其实就是一个m*n的二维表格。对于给定的位置p(x,y)，能到达p的所有可能情况有  从上往下p1(x - 1, y) -&gt; p   从左往右p2(x, y -1) -&gt; p    那么达到p的所有可能路径是paths(p1) + paths(p2);​ 在这个二维表格中，从初始位置到边界的任何位置，都只有一条路径。所以每个边界上的位置的所有">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1633954927299-f368b7ab-27f7-4c34-8a3f-978634c654e1.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=628&amp;id=u06deb707&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1256&amp;originWidth=1408&amp;originalType=binary&amp;ratio=1&amp;size=159850&amp;status=done&amp;style=none&amp;taskId=uf062ccf5-0965-4435-af63-cab234a7f3a&amp;width=704">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1633956123229-2829be6d-9186-4f26-a784-b1cd89c09142.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=160&amp;id=u21a56529&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=320&amp;originWidth=1472&amp;originalType=binary&amp;ratio=1&amp;size=53472&amp;status=done&amp;style=none&amp;taskId=ub459fcaf-7c24-489f-a284-c3b14e05247&amp;width=736">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1633956663340-92c63c4d-97ee-48b3-9b22-3fce4c1b5b39.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=516&amp;id=uc00166a1&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1032&amp;originWidth=1444&amp;originalType=binary&amp;ratio=1&amp;size=174990&amp;status=done&amp;style=none&amp;taskId=u7abe2dfd-3e10-43ad-a779-252f3dfce91&amp;width=722">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1633956684919-3f3cf2aa-b25f-45f9-a0fe-ccdef1d4e951.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=154&amp;id=ue828c396&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=308&amp;originWidth=1438&amp;originalType=binary&amp;ratio=1&amp;size=57228&amp;status=done&amp;style=none&amp;taskId=u3075a308-3d3f-42c4-a0b4-bf5ec874914&amp;width=719">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/9f74740d17ebd0d9dfdfb928c6659a18.svg#card=math&amp;code=f%28x%2Cy%29%3Df%28x-1%2C%20y%29%20%2B%20f%28x%2C%20y-1%29&amp;id=G9SVo">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1633960388559-53efd8a7-b9ae-4afd-bfa2-d56840df8d08.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=314&amp;id=u0f9a7004&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=628&amp;originWidth=1732&amp;originalType=binary&amp;ratio=1&amp;size=160930&amp;status=done&amp;style=none&amp;taskId=u65bb0312-cf78-4dc9-8161-f31ac3a8fd9&amp;width=866">
+<meta property="article:published_time" content="2021-10-11T14:44:35.000Z">
+<meta property="article:modified_time" content="2021-10-11T14:45:47.570Z">
+<meta property="article:author" content="melonkid">
+<meta property="article:tag" content="leetcode">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2021/png/127227/1633954927299-f368b7ab-27f7-4c34-8a3f-978634c654e1.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=628&amp;id=u06deb707&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1256&amp;originWidth=1408&amp;originalType=binary&amp;ratio=1&amp;size=159850&amp;status=done&amp;style=none&amp;taskId=uf062ccf5-0965-4435-af63-cab234a7f3a&amp;width=704">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Leetcode-62-不同路径问题</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdn.staticfile.org/mathjax/2.7.4/MathJax.js' async></script>
+	
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post " href="/20210928163326/86571a9fd114/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20211011224435/89307fe3d0b9/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20211011224435/89307fe3d0b9/&text=Leetcode-62-不同路径问题"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20211011224435/89307fe3d0b9/&is_video=false&description=Leetcode-62-不同路径问题"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Leetcode-62-不同路径问题&body=Check out this article: http://example.com/20211011224435/89307fe3d0b9/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20211011224435/89307fe3d0b9/&name=Leetcode-62-不同路径问题&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20211011224435/89307fe3d0b9/&t=Leetcode-62-不同路径问题"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">动态规划：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text"> </span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A"><span class="toc-number">2.0.1.</span> <span class="toc-text">实现：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%88%E7%8E%87%EF%BC%9A"><span class="toc-number">2.0.2.</span> <span class="toc-text">效率：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">递归：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">实现：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E6%94%B9%E8%BF%9B%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">递归改进：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">实现：</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Leetcode-62-不同路径问题
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">melonkid</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-10-11T14:44:35.000Z" itemprop="datePublished">2021-10-11</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/leetcode/" rel="tag">leetcode</a>, <a class="tag-link-link" href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" rel="tag">动态规划</a>, <a class="tag-link-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a>
+    </div>
+
+
+      
+      <span class="name" >
+          <span id="busuanzi_container_site_pv" style='display:none'></span>
+            |visted:<span id="busuanzi_value_page_pv"></span>
+        </span>
+      </span>
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1633954927299-f368b7ab-27f7-4c34-8a3f-978634c654e1.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=628&amp;id=u06deb707&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1256&amp;originWidth=1408&amp;originalType=binary&amp;ratio=1&amp;size=159850&amp;status=done&amp;style=none&amp;taskId=uf062ccf5-0965-4435-af63-cab234a7f3a&amp;width=704" alt="image.png"></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><h3 id="动态规划："><a href="#动态规划：" class="headerlink" title="动态规划："></a>动态规划：</h3><p>根据跟定条件可以看出，这道题其实就是一个m*n的二维表格。对于给定的位置p(x,y)，能到达p的所有可能情况有</p>
+<ol>
+<li>从上往下p1(x - 1, y) -&gt; p  </li>
+<li>从左往右p2(x, y -1) -&gt; p  </li>
+</ol>
+<p>那么达到p的所有可能路径是paths(p1) + paths(p2);<br>​</p>
+<p>在这个二维表格中，从初始位置到边界的任何位置，都只有一条路径。所以每个边界上的位置的所有可能路径都是1。<br>​</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1633956123229-2829be6d-9186-4f26-a784-b1cd89c09142.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=160&amp;id=u21a56529&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=320&amp;originWidth=1472&amp;originalType=binary&amp;ratio=1&amp;size=53472&amp;status=done&amp;style=none&amp;taskId=ub459fcaf-7c24-489f-a284-c3b14e05247&amp;width=736" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1633956663340-92c63c4d-97ee-48b3-9b22-3fce4c1b5b39.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=516&amp;id=uc00166a1&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=1032&amp;originWidth=1444&amp;originalType=binary&amp;ratio=1&amp;size=174990&amp;status=done&amp;style=none&amp;taskId=u7abe2dfd-3e10-43ad-a779-252f3dfce91&amp;width=722" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1633956684919-3f3cf2aa-b25f-45f9-a0fe-ccdef1d4e951.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=154&amp;id=ue828c396&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=308&amp;originWidth=1438&amp;originalType=binary&amp;ratio=1&amp;size=57228&amp;status=done&amp;style=none&amp;taskId=u3075a308-3d3f-42c4-a0b4-bf5ec874914&amp;width=719" alt="image.png"><br>所以如上图所示，对于给定表格的任何位置，所有路径可能的动态转移方程为：<br><img src="https://cdn.nlark.com/yuque/__latex/9f74740d17ebd0d9dfdfb928c6659a18.svg#card=math&amp;code=f%28x%2Cy%29%3Df%28x-1%2C%20y%29%20%2B%20f%28x%2C%20y-1%29&amp;id=G9SVo" alt=""><br>由上图可知，机器人到达(1,1)位置的所有可能路径为:1+1=2;<br>到达(1,2)位置的所有可能路径为：2+1=3；<br>以此类推：达到最右下角(2,2)的所有路径可能为3+3=6.  </p>
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><h4 id="实现："><a href="#实现：" class="headerlink" title="实现："></a>实现：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 初始化二维表格，记录表格中每个位置的所有可能路径</span></span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化结果表格的横竖边界可能值都为1</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化非边界表格的所有可能路径情况</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            dp[i][j] = dp[i - <span class="number">1</span>][j] + dp[i][j - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> dp[m - <span class="number">1</span>][n - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="效率："><a href="#效率：" class="headerlink" title="效率："></a>效率：</h4><p>时间复杂度：O(m <em> n)<br>空间复杂度，使用了m</em>n的空间用来存储结果集，所以空间复杂度也为：O(m * n)。<br>​</p>
+<h3 id="递归："><a href="#递归：" class="headerlink" title="递归："></a>递归：</h3><p>由上面动态规划可知，要计算表格某个位置的所有路径，只需要知道他上面位置和左边位置的所有路径，并求和即可。<br>那么对于3*3的表格，计算机器到达(2,2)位置的递归过程为：<br><img src="https://cdn.nlark.com/yuque/0/2021/png/127227/1633960388559-53efd8a7-b9ae-4afd-bfa2-d56840df8d08.png#clientId=u42e9ea98-1ed4-4&amp;from=paste&amp;height=314&amp;id=u0f9a7004&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=628&amp;originWidth=1732&amp;originalType=binary&amp;ratio=1&amp;size=160930&amp;status=done&amp;style=none&amp;taskId=u65bb0312-cf78-4dc9-8161-f31ac3a8fd9&amp;width=866" alt="image.png"></p>
+<h4 id="实现：-1"><a href="#实现：-1" class="headerlink" title="实现："></a>实现：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> caculatePaths(m - <span class="number">1</span>, n - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">caculatePaths</span><span class="params">(<span class="keyword">int</span> targetX, <span class="keyword">int</span> targetY)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 当递归到达边界，退出递归并返回1</span></span><br><span class="line">    <span class="keyword">if</span>(targetX == <span class="number">0</span> || targetY == <span class="number">0</span>)&#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 当前位置的上一位置</span></span><br><span class="line">    <span class="keyword">return</span> caculatePaths(targetX - <span class="number">1</span>, targetY) + caculatePaths(targetX, targetY - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​</p>
+<h3 id="递归改进："><a href="#递归改进：" class="headerlink" title="递归改进："></a>递归改进：</h3><p>上面递归算法因为存在大量的重复运算，导致算法耗时比较大。下面通过新增数据字典，将计算过的结果缓存起来。这样就大幅度的降低计算耗时。</p>
+<h4 id="实现：-2"><a href="#实现：-2" class="headerlink" title="实现："></a>实现：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[][] dic = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line">	<span class="keyword">return</span> caculatePaths(m - <span class="number">1</span>, n - <span class="number">1</span>, dic);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">caculatePaths</span><span class="params">(<span class="keyword">int</span> targetX, <span class="keyword">int</span> targetY, <span class="keyword">int</span>[][] dic)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 当递归到达边界，退出递归并返回1</span></span><br><span class="line">    <span class="keyword">if</span>(targetX == <span class="number">0</span> || targetY == <span class="number">0</span>)&#123;</span><br><span class="line">    	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> upPos = dic[i - <span class="number">1</span>][j];</span><br><span class="line">    <span class="keyword">if</span>(upPos == <span class="number">0</span>) &#123;</span><br><span class="line">    	dic[i - <span class="number">1</span>][j] = caculatePaths(targetX - <span class="number">1</span>, targetY);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> leftPos = dic[i][j - <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">if</span>(leftPos == <span class="number">0</span>) &#123;</span><br><span class="line">    	dic[i][j - <span class="number">1</span>] = caculatePaths(targetX, targetY - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 当前位置的上一位置</span></span><br><span class="line">    <span class="keyword">return</span> upPos + leftPos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<div id="vcomments"></div>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'kVnoh5GMJIaO7wfioxy7eqat-gzGzoHsz',
+        appKey: 'OqRohOLiM36VuNLF5jjAJkap',
+        avatar:'mp' // (''/mp/identicon/monsterid/wavatar/robohash/retro)
+    })
+</script>
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">动态规划：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text"> </span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A"><span class="toc-number">2.0.1.</span> <span class="toc-text">实现：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%88%E7%8E%87%EF%BC%9A"><span class="toc-number">2.0.2.</span> <span class="toc-text">效率：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">递归：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">实现：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E6%94%B9%E8%BF%9B%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">递归改进：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%EF%BC%9A-2"><span class="toc-number">2.2.1.</span> <span class="toc-text">实现：</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/20211011224435/89307fe3d0b9/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/20211011224435/89307fe3d0b9/&text=Leetcode-62-不同路径问题"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/20211011224435/89307fe3d0b9/&is_video=false&description=Leetcode-62-不同路径问题"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Leetcode-62-不同路径问题&body=Check out this article: http://example.com/20211011224435/89307fe3d0b9/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/20211011224435/89307fe3d0b9/&title=Leetcode-62-不同路径问题"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/20211011224435/89307fe3d0b9/&name=Leetcode-62-不同路径问题&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/20211011224435/89307fe3d0b9/&t=Leetcode-62-不同路径问题"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    melonkid
+    <span>京ICP备16017845号</span>
+    <span id="busuanzi_container_site_pv" style='display:none'>uv:<span id="busuanzi_value_site_uv"></span>
+    </span>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdn.staticfile.org/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdn.staticfile.org/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
